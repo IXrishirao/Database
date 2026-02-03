@@ -1,0 +1,77 @@
+SELECT * FROM STUDENTS;
+SELECT * FROM COURSES;
+SELECT * FROM ENROLLMENTS;
+
+<Task 3>
+
+SELECT * FROM STUDENTS;
+SELECT name,email from STUDENTS;
+SELECT * FROM STUDENTS ORDER BY age;
+SELECT * FROM STUDENTS ORDER BY join_date;
+SELECT DISTINCT(age) FROM STUDENTS;
+SELECT DISTINCT(course_name) from COURSES;
+
+UPDATE STUDENTS SET age=24 WHERE student_id=1005;
+UPDATE STUDENTS SET active_flag=0 WHERE student_id IN(1004,1007);
+UPDATE COURSES SET fees=fees+(0.1*fees);
+
+DELETE STUDENTS WHERE student_id=1013;
+DELETE COURSES WHERE fees < 1800.00;
+DELETE ENROLLMENTS WHERE enroll_timestamp > '2026-02-28';
+
+ALTER table STUDENTS ALTER column name varchar(60);
+EXEC sp_rename "STUDENTS.join_date", "registration_date","column";
+ALTER table STUDENTS add phone_number varchar(15);
+
+
+<Task 4>
+
+SELECT * FROM STUDENTS WHERE age>21;
+SELECT * FROM STUDENTS WHERE active_flag='true';
+SELECT * FROM COURSES WHERE fees BETWEEN 1000 AND 5000;
+SELECT * FROM STUDENTS WHERE age IN(20,22,25);
+
+SELECT * FROM STUDENTS WHERE age>20 AND active_flag='true';
+SELECT * FROM STUDENTS WHERE age<20 OR active_flag='false';
+SELECT * FROM COURSES WHERE fees>2000 AND course_name LIKE '%C%';
+
+SELECT * FROM STUDENTS WHERE email LIKE '%@gmail.com';
+SELECT * FROM COURSES WHERE course_name LIKE 'I%';
+
+INSERT INTO STUDENTS VALUES (1014,'Sanjay','sanjay@gmail.com',NULL,'2026-01-20',1,NULL);
+SELECT * FROM STUDENTS WHERE age is NULL;
+SELECT * FROM STUDENTS WHERE age is not null;
+
+
+<Task 5>
+
+SELECT COUNT(*) as total_students FROM STUDENTS;
+SELECT COUNT(*) AS active_students FROM STUDENTS WHERE active_flag=1;
+
+SELECT SUM(fees) from COURSES;
+SELECT AVG(fees) from COURSES;
+SELECT SUM(fees) from COURSES where fees>2000.00;
+
+SELECT MIN(age) FROM STUDENTS;
+SELECT MAX(fees) FROM COURSES;
+SELECT MAX(registration_date) from STUDENTS;
+SELECT MIN(registration_date) from STUDENTS;
+
+SELECT active_flag,count(*) from STUDENTS group by active_flag;
+SELECT age, count(*) from STUDENTS group by age;
+SELECT fees,count(*) from COURSES group by fees;
+
+SELECT  course_id from ENROLLMENTS having count(*)>3;
+SELECT age from STUDENTS group by age having age>avg(age);
+SELECT course_id from ENROLLMENTS group by course_id having count(*) > 2; 
+
+
+<Task 6>
+
+SELECT * FROM STUDENTS where age>20 order by age desc;
+SELECT COUNT(*) FROM STUDENTS WHERE name LIKE '%a%'; 
+SELECT course_id,course_name FROM COURSES where fees between 1000 and 5000 order by fees;
+SELECT * FROM STUDENTS where active_flag=0 and age is not null;
+SELECT student_id,count(course_id) from ENROLLMENTS group by student_id having COUNT(course_id) > 1;
+
+
