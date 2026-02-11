@@ -101,3 +101,318 @@ VALUES (3007, 1006, '2025-01-18');
 
 INSERT INTO orders (order_id, customer_id, ordered_date)
 VALUES (3008, 1002, '2025-01-20');
+
+
+
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3001, 2001, 1);
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3001, 2007, 2);
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3002, 2003, 1);
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3003, 2004, 1);
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3004, 2002, 1);
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3005, 2006, 1);
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3006, 2008, 1);
+
+INSERT INTO ordered_items (order_id, product_id, quantity)
+VALUES (3007, 2005, 2);
+
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (10, 'Human Resources', 'Hyderabad', 5001);
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (20, 'Finance', 'Bangalore', 5002);
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (30, 'IT', 'Chennai', 5004);
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (40, 'Operations', 'Pune', 5005);
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (50, 'Marketing', 'Mumbai', 5007);
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (60, 'Sales', 'Delhi', 5008);
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (70, 'Research', 'Bangalore', 5003);
+
+INSERT INTO department (dept_id, dept_name, dept_loc, manager_id)
+VALUES (80, 'Customer Support', 'Kochi', 5006);
+
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5001, 'Rohit Sharma', 'rohit.sharma@company.com', 10, 9876543201, 'Hyderabad');
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5002, 'Anjali Mehra', 'anjali.mehra@company.com', 20, 9876543202, 'Bangalore');
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5003, 'Suresh Kumar', 'suresh.kumar@company.com', 30, 9876543203, 'Chennai');
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5004, 'Neha Gupta', 'neha.gupta@company.com', 40, 9876543204, 'Pune');
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5005, 'Arvind Rao', 'arvind.rao@company.com', 50, 9876543205, 'Mumbai');
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5006, 'Kavya Nair', 'kavya.nair@company.com', 60, 9876543206, 'Delhi');
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5007, 'Manoj Verma', 'manoj.verma@company.com', 70, 9876543207, 'Bangalore');
+
+INSERT INTO employees (emp_id, emp_name, emp_email, dept_id, emp_phno, emp_addr)
+VALUES (5008, 'Sneha Patil', 'sneha.patil@company.com', 80, 9876543208, 'Kochi');
+
+select * from employees;
+
+
+UPDATE employees SET salary = 45000 WHERE emp_id = 5001;
+
+UPDATE employees SET salary = 52000 WHERE emp_id = 5002;
+
+UPDATE employees SET salary = 48000 WHERE emp_id = 5003;
+
+UPDATE employees SET salary = 60000 WHERE emp_id = 5004;
+
+UPDATE employees SET salary = 55000 WHERE emp_id = 5005;
+
+UPDATE employees SET salary = 47000 WHERE emp_id = 5006;
+
+UPDATE employees SET salary = 58000 WHERE emp_id = 5007;
+
+UPDATE employees SET salary = 50000 WHERE emp_id = 5008;
+
+
+
+
+UPDATE ORDERS customer_id = '10' where order_id='6';
+
+create table student_details (
+	student_id int primary key,
+	student_name varchar(255),
+	student_age int not null,
+	student_email varchar(100) unique
+);
+ 
+create table course_details (
+	course_id int primary key,
+	course_name varchar(100),
+);
+ 
+insert into student_details (student_id, student_name, student_age, student_email) values
+(1, 'student_1', 14, 'student1@gmail.com'),
+(2, 'student_2', 15, 'student2@gmail.com'),
+(3, 'student_3', 15, 'student3@gmail.com'),
+(4, 'student_4', 14, 'student4@gmail.com'),
+(5, 'student_5', 15, 'student5@gmail.com');
+ 
+insert into course_details (course_id, course_name) values
+(1, 'course_1'),
+(2, 'course_2'),
+(3, 'course_3'),
+(4, 'course_4'),
+(5, 'course_5');
+ 
+create table students_courses (
+	student_id int,
+	course_id int,
+	primary key(student_id, course_id),
+	foreign key(student_id) references student_details(student_id),
+	foreign key(course_id) references course_details(course_id)
+);
+ 
+insert into students_courses (student_id, course_id) values
+(1, 2),
+(1, 3),
+(2, 1),
+(3, 4),
+(4, 3);
+
+
+
+#INNER JOINN Tasks
+
+SELECT * FROM ORDERS o join customers c ON o.customer_id=c.customer_id;
+SELECT c.customer_name,c.CITY from customers c join orders o ON c.customer_id=o.customer_id;
+SELECT * FROM employees e join department d ON e.dept_id=d.dept_id;
+SELECT * FROM ORDERS o join products p on o.product_id=p.product_id join customers c on c.customer_id=o.customer_id;
+select c.customer_name,c.city,o.ordered_date from customers c join orders o on c.customer_id=o.customer_id;
+SELECT * FROM orders o join products p on o.product_id=p.product_id where product_price>50000.00;
+SELECT * FROM orders o join products p on o.product_id=p.product_id WHERE product_name like 'i%';
+
+
+#LEFT JOINN Tasks
+
+SELECT * FROM customers c left join orders o on c.customer_id=o.customer_id;
+SELECT * FROM customers c left join orders o on c.customer_id!=o.customer_id;
+SELECT * FROM department d left join employees e on d.dept_id=e.dept_id;
+SELECT * FROM department d left join employees e on d.dept_id=e.dept_id;
+SELECT * FROM orders o left join products p on  p.product_id!=o.product_id;
+SELECT * FROM orders o left join products p on o.product_id=p.product_id where product_price>50000.00;
+SELECT * FROM orders o left join products p on o.product_id=p.product_id WHERE product_name like 'i%';
+
+
+#Right joinn tasks
+
+SELECT * FROM orders o right join customers c on o.customer_id=c.customer_id;
+SELECT p.product_name,count(*) from products p right join ordered_items oi on oi.product_id=p.product_id group by p.product_name;
+SELECT * FROM employees e right join department d on e.dept_id=d.dept_id;
+
+
+#Full outerr joinn
+
+SELECT * FROM customers c full outer join orders o on c.customer_id=o.customer_id;
+SELECT * FROM customers c full outer join orders o on c.customer_id=o.customer_id where o.order_id is null;
+SELECT * FROM employees e full outer join department d on e.dept_id=d.dept_id;
+SELECT * FROM customers c left join orders o on c.customer_id=o.customer_id UNION SELECT * FROM customers c right join orders o on c.customer_id=o.customer_id
+
+#Self joinn
+
+SELECT e.emp_id,e.emp_name as employee_name,m.emp_name as manager_name from employees e join employees m on e.manager_id=m.emp_id;
+UPDATE Employees SET manager_id = 10001 WHERE manager_id IS NULL;
+Insert into Employees values(5009,'samar','samar@gmail.com',70,4508034532,'Andhra',55000,5003);
+
+select e.emp_id,m.emp_name as manager_name from employees e join Employees m on e.manager_id=m.emp_id order by e.manager_id;
+select distinct e.emp_name as manager_name from Employees e join Employees m on e.emp_id=m.manager_id;
+
+select e.emp_name,m.emp_name from Employees e join Employees m on e.manager_id=m.emp_id;
+
+#CROSS joinn
+
+SELECT * FROM customers cross join products;
+select e1.emp_name as employee1,e2.emp_name as employee2 from employees e1 cross join employees e2 where e1.emp_id<>e2.emp_id;
+
+
+#Multi tablee joinss
+
+CREATE TABLE Suppliers(
+    supplier_id INT PRIMARY KEY,
+    supplier_name VARCHAR(255) NOT NULL,
+    contact_email VARCHAR(255),
+    phone BIGINT,
+    country VARCHAR(255)
+);
+
+insert into Suppliers values(1,'google','google.com',9182938267,'india');
+insert into Suppliers values(2,'amazon','amazon@gmail.com',6281857512,'usa');
+insert into Suppliers values(3,'microsoft','microsoft@gmail.com',9345403336,'canada');
+
+select * from products;
+
+ALTER TABLE products add supplier_id INT;
+
+ALTER TABLE products ADD FOREIGN KEY (supplier_id) REFERENCES Suppliers(supplier_id);
+
+UPDATE products SET supplier_id =1 WHERE product_id = 2001;
+UPDATE products SET supplier_id =1 WHERE product_id = 2002;
+UPDATE products SET supplier_id =1 WHERE product_id = 2003;
+UPDATE products SET supplier_id =2 WHERE product_id = 2004;
+UPDATE products SET supplier_id =2 WHERE product_id = 2005;
+
+select * from products p join ordered_items oi on p.product_id=oi.product_id join Suppliers s on s.supplier_id=p.supplier_id;
+select * from customers c join orders o on c.customer_id=o.customer_id join ordered_items oi on oi.order_id=o.order_id join products p on p.product_id=oi.product_id join Suppliers s on s.supplier_id=p.supplier_id;
+select * from customers c join orders o on c.customer_id=o.customer_id join ordered_items oi on oi.order_id=o.order_id; 
+
+
+#Joinn plus group by
+
+SELECT c.customer_id,count(*) from customers c join orders o on c.customer_id=o.customer_id group by c.customer_id;
+select c.customer_id,sum(oi.quantity*p.product_price) from customers c join orders o on c.customer_id=o.customer_id join ordered_items oi on o.order_id=oi.order_id join products p on p.product_id=oi.product_id group by c.customer_id;
+select d.dept_id,count(e.emp_id) from department d left join employees e on d.dept_id=e.dept_id group by d.dept_id;
+select p.product_id,count(oi.product_id) from products p left join ordered_items oi on p.product_id=oi.product_id group by p.product_id;
+select d.dept_id,sum(e.salary) from department d left join employees e on e.dept_id=d.dept_id group by d.dept_id;
+
+
+#JOINN plus having tasks
+
+select c.customer_id,count(o.order_id)  from customers c left join orders o on c.customer_id=o.customer_id group by c.customer_id having count(o.order_id)>1;
+select d.dept_id,count(e.emp_id) from department d join employees e on e.dept_id=d.dept_id group by d.dept_id having count(e.emp_id)>1;
+SELECT p.product_id, p.product_name, COUNT(*) AS times_ordered FROM ordered_items oi JOIN products p ON oi.product_id = p.product_id GROUP BY p.product_id, p.product_name HAVING COUNT(*) > 0;
+select c.customer_id,sum(p.product_price*oi.quantity) from customers c join orders o on o.customer_id=c.customer_id  join ordered_items oi on oi.order_id=o.order_id join products p on p.product_id=oi.product_id group by c.customer_id having sum(p.product_price*quantity)>10000.00;
+
+
+#Joinn plus count
+
+select c.customer_id,count(order_id) as orders from customers c join orders o on c.customer_id=o.customer_id group by c.customer_id;
+select d.dept_id,count(e.emp_id) as total_emp from department d left join employees e on e.dept_id=d.dept_id group by d.dept_id;
+select c.city,count(o.order_id) from customers c join orders o on c.customer_id=o.customer_id group by c.city;
+
+
+#Join plus where tasks
+
+select c.customer_id,c.customer_name,c.email,o.order_id,o.ordered_date from customers c join orders o on c.customer_id=o.customer_id where o.ordered_date>'2016-09-12';
+select e.emp_id,d.dept_id,e.emp_name from Employees e join department d on e.dept_id=d.dept_id where d.dept_name='IT';
+select c.customer_id,c.customer_name,c.city from customers c join orders o on c.customer_id=o.customer_id where c.city='Chennai';
+select p.product_id,p.product_name,p.product_price from orders o join ordered_items oi on o.order_id=oi.order_id join products p on oi.product_id=p.product_id where p.product_price>55000.00; 
+
+
+#Join plus like tasks
+
+select c.customer_id,c.customer_name from customers c join orders o on c.customer_id=o.customer_id where c.customer_name like 'p%';
+select e.emp_name from employees e join department d on e.dept_id=d.dept_id where e.emp_name like 'A%';
+SELECT p.product_id, p.product_name, oi.quantity FROM products p JOIN ordered_items oi ON p.product_id = oi.product_id JOIN orders o ON o.order_id = oi.order_id WHERE p.product_name LIKE '%phone%';
+
+
+#Join plus subquery tasks
+
+select t.customer_id from (select c.customer_id from customers c join orders o on c.customer_id=o.customer_id )t;
+select customer_id from customers where customer_id in (select customer_id from orders);
+select customer_id from customers where customer_id not in (select customer_id from orders);
+select product_id from products where product_id not in(select product_id from ordered_items);
+
+select emp_id from employees where emp_id not in (select emp_id from department d join Employees e on e.dept_id=d.dept_id);
+select emp_id from employees where dept_id not in(select dept_id from department);
+
+select oi.order_id,sum(oi.quantity*p.product_price) as order_total from ordered_items oi join products p on oi.product_id=p.product_id group by oi.order_id having 
+sum(oi.quantity*p.product_price)>(select avg(order_total)  from (select sum(oi2.quantity*p2.product_price)as order_total from products p2 join ordered_items oi2 on 
+p2.product_id=oi2.product_id group by oi2.order_id)t);
+
+select c.customer_id,sum(oi.quantity*p.product_price)as order_total from customers c join orders o on c.customer_id=o.customer_id join ordered_items oi on o.order_id=oi.order_id join products p 
+on p.product_id=oi.product_id group by c.customer_id having sum(oi.quantity*p.product_price)>(select avg(order_total) from (select sum(oi2.quantity*p2.product_price)as order_total from products p2 join 
+ordered_items oi2 on p2.product_id=oi2.product_id group by oi2.order_id)t);
+
+select e.emp_id,e.emp_name,e.salary from employees e where e.salary>(select avg(e1.salary) from employees e1 where e1.dept_id=e.dept_id);
+
+select dept_id,dept_name from department d where dept_id in (select dept_id from employees );
+
+alter table customers add status varchar(20);
+
+UPDATE Customers SET status = 'Active';
+UPDATE Customers SET status = 'Inactive' WHERE customer_id = 1001;
+
+select * from customers;
+
+select customer_id,status from customers where customer_id not in (select customer_id from customers where status='inactive');
+
+select c.customer_id,c.customer_name from customers c where exists (select 1 from orders o where o.customer_id=c.customer_id);
+
+select e.emp_id,e.emp_name,d.dept_name, case when e.salary>=5000 then'High salary' else 'low salary' end as salaryrange from employees e join department d on e.dept_id=d.dept_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
