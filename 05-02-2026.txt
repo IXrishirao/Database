@@ -1,0 +1,103 @@
+CREATE TABLE customers(customer_id BIGINT PRIMARY KEY,customer_name VARCHAR(100) NOT NULL, email VARCHAR(150) UNIQUE, CITY VARCHAR(100) NOT NULL);
+
+CREATE TABLE products(product_id BIGINT PRIMARY KEY, product_name VARCHAR(100) UNIQUE NOT NULL,product_price DECIMAL(10,2) NOT NULL, model_year INT);
+
+CREATE TABLE orders(order_id BIGINT PRIMARY KEY, customer_id BIGINT NOT NULL, ordered_date DATE NOT NULL, CONSTRAINT fk_orders_customer FOREIGN KEY(customer_id) REFERENCES customers(customer_id));
+ALTER TABLE orders add product_id BIGINT CONSTRAINT fk_orders_products FOREIGN KEY(product_id) REFERENCES products(product_id);
+
+CREATE TABLE ordered_items(order_id BIGINT NOT NULL, product_id BIGINT NOT NULL, quantity INT NOT NULL, PRIMARY KEY(order_id,product_id), CONSTRAINT fk_oi_order FOREIGN KEY(order_id) REFERENCES orders(order_id),CONSTRAINT fk_oi_product FOREIGN KEY(product_id) REFERENCES products(product_id));
+
+CREATE TABLE department(dept_id BIGINT PRIMARY KEY, dept_name VARCHAR(30), dept_loc VARCHAR(20), manager_id BIGINT)
+
+CREATE TABLE employees(emp_id BIGINT PRIMARY KEY,emp_name VARCHAR(30),emp_email VARCHAR(150)
+UNIQUE, dept_id bigint CONSTRAINT fk_emp_dept FOREIGN KEY(dept_id) REFERENCES department(dept_id),emp_phno BIGINT UNIQUE, emp_addr VARCHAR(100));
+ALTER TABLE employees add salary bigint;
+ALTER TABLE employees add manager_id bigint;
+
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1001, 'Ravi Kumar', 'ravi.kumar@gmail.com', 'Hyderabad');
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1002, 'Ananya Sharma', 'ananya.sharma@gmail.com', 'Bangalore');
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1003, 'Arjun Mehta', 'arjun.mehta@gmail.com', 'Mumbai');
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1004, 'Priya Singh', 'priya.singh@gmail.com', 'Delhi');
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1005, 'Karthik Reddy', 'karthik.reddy@gmail.com', 'Chennai');
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1006, 'Neha Verma', 'neha.verma@gmail.com', 'Pune');
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1007, 'Amit Patel', 'amit.patel@gmail.com', 'Ahmedabad');
+
+INSERT INTO customers (customer_id, customer_name, email, city)
+VALUES (1008, 'Sneha Iyer', 'sneha.iyer@gmail.com', 'Coimbatore');
+
+
+UPDATE orders set product_id=2001 where order_id=3001;
+UPDATE orders set product_id=2002 where order_id=3002;
+UPDATE orders set product_id=2003 where order_id=3003;
+UPDATE orders set product_id=2004 where order_id=3004;
+UPDATE orders set product_id=2005 where order_id=3005;
+UPDATE orders set product_id=2006 where order_id=3006;
+UPDATE orders set product_id=2007 where order_id=3007;
+UPDATE orders set product_id=2008 where order_id=3008;
+
+
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2001, 'iPhone 14', 69999.00, 2023);
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2002, 'Samsung Galaxy S23', 74999.50, 2023);
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2003, 'OnePlus 11', 56999.99, 2023);
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2004, 'Dell Inspiron 15', 58999.00, 2022);
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2005, 'HP Pavilion x360', 64999.00, 2022);
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2006, 'Apple Watch Series 8', 41999.00, 2023);
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2007, 'Sony WH-1000XM5 Headphones', 29999.00, 2023);
+
+INSERT INTO products (product_id, product_name, product_price, model_year)
+VALUES (2008, 'Lenovo ThinkPad E14', 72999.00, 2021);
+
+
+
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3001, 1001, '2025-01-05');
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3002, 1002, '2025-01-06');
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3003, 1003, '2025-01-08');
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3004, 1004, '2025-01-10');
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3005, 1001, '2025-01-12');
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3006, 1005, '2025-01-15');
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3007, 1006, '2025-01-18');
+
+INSERT INTO orders (order_id, customer_id, ordered_date)
+VALUES (3008, 1002, '2025-01-20');
