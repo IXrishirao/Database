@@ -1,0 +1,275 @@
+
+CREATE TABLE properties (
+    property_id BIGINT PRIMARY KEY,
+    property_name VARCHAR(150) NOT NULL,
+    address TEXT NOT NULL,
+    landlord_id BIGINT NOT NULL
+);
+
+CREATE TABLE tenants (
+    tenant_id BIGINT PRIMARY KEY,
+    tenant_name VARCHAR(150) NOT NULL,
+    email VARCHAR(150) UNIQUE,
+    phone VARCHAR(15)
+);
+
+CREATE TABLE contracts (
+    contract_id BIGINT PRIMARY KEY,
+    property_id BIGINT NOT NULL,
+    tenant_id BIGINT NOT NULL,
+    move_in_date DATE NOT NULL,
+    move_out_date DATE,
+    is_active BIT DEFAULT 1,
+    fixed_charge_share_percent DECIMAL(5,2) DEFAULT 0,
+    FOREIGN KEY (property_id) REFERENCES properties(property_id),
+    FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id)
+);
+
+CREATE TABLE meters (
+    meter_id BIGINT PRIMARY KEY,
+    property_id BIGINT UNIQUE NOT NULL,
+    meter_type VARCHAR(50),
+    installation_date DATE,
+    FOREIGN KEY (property_id) REFERENCES properties(property_id)
+);
+
+CREATE TABLE meter_readings (
+    reading_id BIGINT PRIMARY KEY,
+    meter_id BIGINT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    start_reading DECIMAL(10,2) NOT NULL,
+    end_reading DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (meter_id) REFERENCES meters(meter_id),
+    CHECK (end_date > start_date),
+    CHECK (end_reading >= start_reading)
+);
+
+CREATE TABLE tariff (
+    tariff_id BIGINT PRIMARY KEY,
+    min_units DECIMAL(10,2) NOT NULL,
+    max_units DECIMAL(10,2),
+    rate_per_unit DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE invoices (
+    invoice_id BIGINT PRIMARY KEY,
+    property_id BIGINT NOT NULL,
+    contract_id BIGINT NOT NULL,
+    invoice_start DATE NOT NULL,
+    invoice_end DATE NOT NULL,
+    total_usage DECIMAL(10,2) NOT NULL,
+    total_amount DECIMAL(12,2) NOT NULL,
+    status VARCHAR(20) DEFAULT 'Generated',
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (property_id) REFERENCES properties(property_id),
+    FOREIGN KEY (contract_id) REFERENCES contracts(contract_id)
+);
+
+CREATE TABLE invoice_details (
+    detail_id BIGINT PRIMARY KEY,
+    invoice_id BIGINT NOT NULL,
+    description VARCHAR(200),
+    units DECIMAL(10,2),
+    rate DECIMAL(10,2),
+    amount DECIMAL(12,2) NOT NULL,
+    FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id)
+);
+
+CREATE TABLE payments (
+    payment_id BIGINT PRIMARY KEY,
+    invoice_id BIGINT NOT NULL,
+    payment_date DATE NOT NULL,
+    amount_paid DECIMAL(12,2) NOT NULL,
+    FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id)
+);
+
+#property table records
+
+INSERT INTO properties (property_id, property_name, address, landlord_id) VALUES
+(1, 'Green Heights Apt 101', 'Hyderabad', 1001),
+(2, 'Blue Residency Flat 202', 'Hyderabad', 1002),
+(3, 'Sunshine Villa', 'Bangalore', 1003),
+(4, 'Lake View Apartment', 'Chennai', 1004),
+(5, 'Skyline Towers', 'Mumbai', 1005),
+(6, 'Palm Residency', 'Hyderabad', 1006);
+
+
+
+#tenants table records
+
+INSERT INTO tenants (tenant_id, tenant_name, email, phone) VALUES
+(1, 'Rishi', 'rishi@gmail.com', '9000000001'),
+(2, 'Saiteja', 'saiteja@gmail.com', '9000000002'),
+(3, 'Sneha', 'sneha@gmail.com', '9000000003'),
+(4, 'Valli', 'valli@gmail.com', '9000000004'),
+(5, 'Sairaj', 'sairaj@gmail.com', '9000000005'),
+(6, 'Vijay', 'vijay@gmail.com', '9000000006'),
+(7, 'Sanjay', 'sanjay@gmail.com', '9000000007');
+
+
+
+#Contracts table records
+
+INSERT INTO contracts
+(contract_id, property_id, tenant_id, move_in_date, move_out_date, is_active, fixed_charge_share_percent)
+VALUES
+(1, 1, 1, '2024-01-01', '2024-06-30', 0, 100),
+(2, 1, 2, '2024-07-01', NULL, 1, 70),
+(3, 2, 3, '2024-03-01', NULL, 1, 80),
+(4, 3, 4, '2024-01-15', '2024-12-31', 1, 90),
+(5, 1, 1, '2023-01-01', '2023-12-31', 0, 100),
+(6, 4, 5, '2024-02-01', NULL, 1, 75),
+(7, 5, 6, '2024-01-01', NULL, 1, 60),
+(8, 6, 7, '2024-05-01', NULL, 1, 85);
+
+
+
+#Meters table records
+
+INSERT INTO meters (meter_id, property_id, meter_type, installation_date) VALUES
+(1, 1, 'Electricity', '2023-01-01'),
+(2, 2, 'Water', '2023-02-01'),
+(3, 3, 'Electricity', '2023-03-01'),
+(4, 4, 'Water', '2023-04-01'),
+(5, 5, 'Electricity', '2023-05-01'),
+(6, 6, 'Water', '2023-06-01');
+
+
+
+#Meter_readings table records
+
+INSERT INTO meter_readings
+(reading_id, meter_id, start_date, end_date, start_reading, end_reading)
+VALUES
+(1, 1, '2024-07-01', '2024-07-31', 1000, 1300),
+(2, 1, '2024-08-01', '2024-08-31', 1300, 1650),
+(3, 2, '2024-07-01', '2024-07-31', 500, 650),
+(4, 3, '2024-07-01', '2024-07-31', 2000, 2400),
+(5, 4, '2024-07-01', '2024-07-31', 800, 950),
+(6, 5, '2024-07-01', '2024-07-31', 1200, 1500),
+(7, 6, '2024-07-01', '2024-07-31', 400, 520),
+(8, 4, '2024-08-01', '2024-08-31', 950, 1200),
+(9, 5, '2024-08-01', '2024-08-31', 1500, 1850);
+
+
+
+#Tariff table records
+
+INSERT INTO tariff (tariff_id, min_units, max_units, rate_per_unit) VALUES
+(1, 0, 100, 2.00),
+(2, 101, 300, 3.00),
+(3, 301, NULL, 5.00);
+
+
+
+#Invoice table records
+
+INSERT INTO invoices
+(invoice_id, property_id, contract_id, invoice_start, invoice_end, total_usage, total_amount, status)
+VALUES
+(1, 1, 2, '2024-07-01', '2024-07-31', 300, 1100, 'Partial'),
+(2, 1, 2, '2024-08-01', '2024-08-31', 350, 1400, 'Generated'),
+(3, 2, 3, '2024-07-01', '2024-07-31', 150, 500, 'Paid'),
+(4, 3, 4, '2024-07-01', '2024-07-31', 400, 2000, 'Generated'),
+(5, 4, 6, '2024-07-01', '2024-07-31', 150, 600, 'Generated'),
+(6, 5, 7, '2024-07-01', '2024-07-31', 300, 1200, 'Partial'),
+(7, 6, 8, '2024-07-01', '2024-07-31', 120, 450, 'Paid'),
+(8, 4, 6, '2024-08-01', '2024-08-31', 250, 900, 'Generated');
+
+
+
+#Invoice_details table record
+
+INSERT INTO invoice_details
+(detail_id, invoice_id, description, units, rate, amount)
+VALUES
+(1, 1, 'Slab Charge', 300, 3, 900),
+(2, 1, 'Fixed Charge Share', 1, 200, 200),
+
+(3, 2, 'Slab Charge', 350, 3, 1050),
+(4, 2, 'Fixed Charge Share', 1, 350, 350),
+
+(5, 3, 'Slab Charge', 150, 3, 450),
+(6, 3, 'Fixed Charge Share', 1, 50, 50),
+
+(7, 4, 'Slab Charge', 400, 4, 1600),
+(8, 4, 'Fixed Charge Share', 1, 400, 400),
+
+(9, 5, 'Slab Charge', 150, 3, 450),
+(10, 5, 'Fixed Charge Share', 1, 150, 150),
+
+(11, 6, 'Slab Charge', 300, 3, 900),
+(12, 6, 'Fixed Charge Share', 1, 300, 300),
+
+(13, 7, 'Slab Charge', 120, 3, 360),
+(14, 7, 'Fixed Charge Share', 1, 90, 90),
+
+(15, 8, 'Slab Charge', 250, 3, 750),
+(16, 8, 'Fixed Charge Share', 1, 150, 150);
+
+
+
+#Payments table records
+
+INSERT INTO payments (payment_id, invoice_id, payment_date, amount_paid) VALUES
+(1, 1, '2024-08-05', 600),
+(2, 3, '2024-08-02', 500),
+(3, 6, '2024-08-10', 600),
+(4, 7, '2024-08-05', 450),
+(5, 6, '2024-08-15', 300);
+
+
+# Show tenants who had more than one contract for the same property. 
+
+SELECT t.tenant_id,t.tenant_name,c.property_id,COUNT(c.contract_id) as contract_count
+from contracts c join tenants t on t.tenant_id=c.tenant_id 
+group by t.tenant_id,t.tenant_name,c.property_id
+having COUNT(c.contract_id)>1;
+
+
+# Find invoices that were generated but have no payment records 
+
+Select i.invoice_id,i.property_id,i.status 
+from invoices i left join payments p 
+on i.invoice_id=p.invoice_id 
+where p.invoice_id is null AND i.status='Generated';
+
+
+#Show properties where no invoice was generated for the last 3 months
+
+Select p.property_id,p.property_name
+from properties p 
+where NOT EXISTS (
+		SELECT * FROM invoices i
+        WHERE i.property_id = p.property_id AND i.invoice_start >= DATEADD(MONTH, -3, GETDATE()));
+
+
+#Find tenants who moved out but still have active contracts
+
+select t.tenant_id,t.tenant_name,c.contract_id
+from contracts c join tenants t on
+c.tenant_id=t.tenant_id
+where c.move_out_date is not null and c.is_active=1;
+
+
+#Show invoices where total amount in Invoice_Details does not match Invoice total amount
+
+SELECT i.invoice_id, i.total_amount,SUM(d.amount) AS detail_total
+FROM invoices i JOIN invoice_details d ON i.invoice_id = d.invoice_id
+GROUP BY i.invoice_id, i.total_amount
+HAVING SUM(d.amount) <> i.total_amount;
+
+INSERT INTO invoices (invoice_id, property_id, contract_id, invoice_start, invoice_end, total_usage, total_amount, status)
+VALUES(9, 2, 3, '2024-08-01', '2024-08-31', 200, 1500, 'Generated');
+
+INSERT INTO invoice_details (detail_id, invoice_id, description, units, rate, amount)
+VALUES(17, 9, 'Slab Charge', 200, 3, 600),(18, 9, 'Fixed Charge Share', 1, 200, 200);
+
+SELECT i.invoice_id, i.total_amount,SUM(d.amount) AS detail_total
+FROM invoices i JOIN invoice_details d ON i.invoice_id = d.invoice_id
+GROUP BY i.invoice_id, i.total_amount
+HAVING SUM(d.amount) <> i.total_amount;
+
+
+
