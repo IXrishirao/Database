@@ -1,0 +1,83 @@
+Table properties {
+  property_id bigint [pk]
+  property_name varchar(150) [not null]
+  address text [not null]
+  landlord_id bigint [not null]
+}
+
+Table tenants {
+  tenant_id bigint [pk]
+  tenant_name varchar(150) [not null]
+  email varchar(150) [unique]
+  phone varchar(15)
+}
+
+Table contracts {
+  contract_id bigint [pk]
+  property_id bigint [not null]
+  tenant_id bigint [not null]
+  move_in_date date [not null]
+  move_out_date date
+  is_active bit [default: 1]
+  fixed_charge_share_percent decimal(5,2) [default: 0]
+}
+
+Table meters {
+  meter_id bigint [pk]
+  property_id bigint [not null, unique]
+  meter_type varchar(50)
+  installation_date date
+}
+
+Table meter_readings {
+  reading_id bigint [pk]
+  meter_id bigint [not null]
+  start_date date [not null]
+  end_date date [not null]
+  start_reading decimal(10,2) [not null]
+  end_reading decimal(10,2) [not null]
+}
+
+Table tariff {
+  tariff_id bigint [pk]
+  min_units decimal(10,2) [not null]
+  max_units decimal(10,2]
+  rate_per_unit decimal(10,2) [not null]
+}
+
+Table invoices {
+  invoice_id bigint [pk]
+  property_id bigint [not null]
+  contract_id bigint [not null]
+  invoice_start date [not null]
+  invoice_end date [not null]
+  total_usage decimal(10,2) [not null]
+  total_amount decimal(12,2) [not null]
+  status varchar(20) [default: 'Generated']
+  created_at datetime
+}
+
+Table invoice_details {
+  detail_id bigint [pk]
+  invoice_id bigint [not null]
+  description varchar(200)
+  units decimal(10,2)
+  rate decimal(10,2)
+  amount decimal(12,2) [not null]
+}
+
+Table payments {
+  payment_id bigint [pk]
+  invoice_id bigint [not null]
+  payment_date date [not null]
+  amount_paid decimal(12,2) [not null]
+}
+
+Ref: contracts.property_id > properties.property_id
+Ref: contracts.tenant_id > tenants.tenant_id
+Ref: meters.property_id > properties.property_id
+Ref: meter_readings.meter_id > meters.meter_id
+Ref: invoices.property_id > properties.property_id
+Ref: invoices.contract_id > contracts.contract_id
+Ref: invoice_details.invoice_id > invoices.invoice_id
+Ref: payments.invoice_id > invoices.invoice_id
